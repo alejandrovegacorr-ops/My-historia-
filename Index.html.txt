@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Para quienes forman parte de mi historia</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top, #242424 0%, #101010 45%, #070707 100%);
+            color: #f5f5f5;
+            font-family: Georgia, "Times New Roman", serif;
+            overflow-x: hidden;
+        }
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            text-align: center;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.7s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .symbol {
+            font-size: 50px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        h1 {
+            font-size: clamp(32px, 8vw, 60px);
+            font-weight: 400;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+        }
+
+        h2 {
+            font-size: clamp(27px, 6vw, 42px);
+            font-weight: 400;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            color: #bdbdbd;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+            max-width: 620px;
+            margin: 0 auto 35px;
+        }
+
+        .small-text {
+            color: #888;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+
+        .button {
+            border: 1px solid #555;
+            background: rgba(255,255,255,0.05);
+            color: white;
+            padding: 15px 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .button:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: #aaa;
+            transform: translateY(-2px);
+        }
+
+        .people {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 650px;
+            margin: 35px auto 0;
+        }
+
+        .person {
+            padding: 35px 20px;
+            border: 1px solid #333;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.035);
+            cursor: pointer;
+            transition: 0.35s;
+        }
+
+        .person:hover {
+            transform: translateY(-6px);
+            border-color: #777;
+            background: rgba(255,255,255,0.07);
+        }
+
+        .person-icon {
+            font-size: 38px;
+            margin-bottom: 15px;
+        }
+
+        .person-name {
+            font-size: 23px;
+            margin-bottom: 8px;
+        }
+
+        .person-description {
+            color: #888;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+        }
+
+        .question-card {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 35px 25px;
+            border-radius: 22px;
+            border: 1px solid #333;
+            background: rgba(255,255,255,0.04);
+        }
+
+        .lock {
+            font-size: 42px;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 21px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        input {
+            width: 100%;
+            max-width: 430px;
+            padding: 16px 18px;
+            border-radius: 12px;
+            border: 1px solid #444;
+            outline: none;
+            background: #111;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        input:focus {
+            border-color: #888;
+        }
+
+        .error {
+            color: #d88;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            margin-top: 12px;
+            min-height: 20px;
+        }
+
+        .letter {
+            max-width: 760px;
+            margin: 30px auto;
+            padding: 45px 35px;
+            background:
+                linear-gradient(
+                    rgba(255,255,255,0.96),
+                    rgba(240,240,240,0.96)
+                );
+            color: #1b1b1b;
+            border-radius: 5px;
+            text-align: left;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.45);
+            animation: letterOpen 1s ease;
+        }
+
+        .letter-title {
+            text-align: center;
+            font-size: 30px;
+            margin-bottom: 30px;
+        }
+
+        .letter-body {
+            white-space: pre-line;
+            font-size: 17px;
+            line-height: 1.9;
+        }
+
+        .signature {
+            text-align: right;
+            margin-top: 35px;
+            font-style: italic;
+            font-size: 18px;
+        }
+
+        .back-button {
+            margin-top: 25px;
+        }
+
+        .unlock {
+            font-size: 50px;
+            margin-bottom: 15px;
+            animation: unlock 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        @keyframes letterOpen {
+            0% {
+                opacity: 0;
+                transform: scale(0.94) translateY(25px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes unlock {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            60% {
+                transform: scale(1.15);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .people {
+                grid-template-columns: 1fr;
+            }
+
+            .letter {
+                padding: 30px 22px;
+            }
+
+            .letter-body {
+                font-size: 16px;
+                line-height: 1.8;
+            }
+
+            .question-card {
+                padding: 28px 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+    <div class="container">
+
+        <!-- PANTALLA DE INICIO -->
+        <section id="home" class="screen active">
+
+            <div class="symbol">✦</div>
+
+            <h1>Para quienes forman parte de mi historia.</h1>
+
+            <p class="subtitle">
+                Hay personas que quizá nunca sepan cuánto significaron
+                para mí. Por eso hice esto.
+            </p>
+
+            <button class="button" onclick="showScreen('people')">
+                ENTRAR A MI HISTORIA
+            </button>
+
+            <p class="small-text">
+                Algunos recuerdos necesitan una llave para abrirse.
+            </p>
+
+        </section>
+
+
+        <!-- SELECCIÓN DE PERSONA -->
+        <section id="people" class="screen">
+
+            <div class="symbol">♡</div>
+
+            <h2>¿Quién eres?</h2>
+
+            <p class="subtitle">
+                Hay un mensaje esperando a cada persona.
+                Pero primero tendrás que demostrar que realmente eres tú.
+            </p>
+
+            <div class="people">
+
+                <div class="person" onclick="selectPerson('mama')">
+                    <div class="person-icon">❤️</div>
+                    <div class="person-name">Mamá</div>
+                    <div class="person-description">
+                        Una de las personas que ha estado desde el principio.
+                    </div>
+                </div>
+
+                <div class="person" onclick="selectPerson('yareli')">
+                    <div class="person-icon">♡</div>
+                    <div class="person-name">Yareli</div>
+                    <div class="person-description">
+                        Alguien que cambió una parte de mi historia.
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="button back-button" onclick="showScreen('home')">
+                VOLVER
+            </button>
+
+        </section>
+
+
+        <!-- PANTALLA DE PREGUNTA -->
+        <section id="questionScreen" class="screen">
+
+            <div class="question-card">
+
+                <div class="lock" id="lockIcon">🔒</div>
+
+                <h2 id="questionTitle"></h2>
+
+                <p class="question" id="questionText"></p>
+
+                <input
+                    type="text"
+                    id="answerInput"
+                    placeholder="Escribe tu respuesta..."
+                    autocomplete="off"
+                    onkeydown="if(event.key === 'Enter') checkAnswer()"
+                >
+
+                <br>
+
+                <button class="button" onclick="checkAnswer()">
+                    DESBLOQUEAR
+                </button>
+
+                <div class="error" id="errorText"></div>
+
+            </div>
+
+            <button class="button" onclick="showScreen('people')">
+                ← ELEGIR OTRA PERSONA
+            </button>
+
+        </section>
+
+
+        <!-- PANTALLA DE DESBLOQUEO -->
+        <section id="unlockScreen" class="screen">
+
+            <div class="unlock">🔓</div>
+
+            <h2>Mensaje desbloqueado</h2>
+
+            <p class="subtitle">
+                Este mensaje fue escrito especialmente para ti.
+            </p>
+
+            <button class="button" onclick="showLetter()">
+                ABRIR MENSAJE
+            </button>
+
+        </section>
+
+
+        <!-- CARTA -->
+        <section id="letterScreen" class="screen">
+
+            <div class="letter">
+
+                <div class="letter-title" id="letterTitle"></div>
+
+                <div class="letter-body" id="letterBody"></div>
+
+                <div class="signature">
+                    — Alejandro
+                </div>
+
+            </div>
+
+            <div style="text-align:center;">
+                <button class="button" onclick="showScreen('people')">
+                    ← VOLVER A LOS MENSAJES
+                </button>
+            </div>
+
+        </section>
+
+    </div>
+</div>
+
+
+<script>
+
+    const messages = {
+
+        mama: {
+            title: "Para mamá ❤️",
+
+            question:
+                "¿Cuándo fue el día que lloraste porque un Alito te dijo \"te quiero, mamá\"?",
+
+            answers: [
+                "31 de julio del 2011",
+                "31/07/2011",
+                "31-07-2011",
+                "31 de julio de 2011"
+            ],
+
+            message:
+`Gracias por tu paciencia infinita, por tus abrazos que sanan cualquier mal día y por esa forma tan única que tienes de cuidar a la familia. No importa cuánto crezca o cuántas cosas cambien en la vida, saber que cuento contigo siempre me da paz y fuerza para seguir adelante.
+
+Eres un pilar fundamental en mi vida, la persona que me enseñó a luchar, a amar y a no rendirme. Le agradezco enormemente a la vida por tener la dicha de ser tu hijo y compartir la vida contigo.
+
+Te amo muchísimo, mamá. Espero siempre poder sacarte una sonrisa, así como tú me has alegrado la vida desde que nací. ❤️`
+        },
+
+
+        yareli: {
+            title: "Para Yareli ♡",
+
+            question:
+                "¿Cómo te llama Alejandro de manera especial?",
+
+            answers: [
+                "pequeña"
+            ],
+
+            message:
+`Yareli que te pasa de verdad porque sacudes mi mundo porque tu que hay en ti?,quiero seguir a tu lado quiero averiguarlo.
+
+Se que ya lo eh dicho pero no el porque completamente te eh mentido como ah todos
+
+No tenia pasiones no me gustaba jugar no me gustaba la barbería no me gustaba nada hasta que me gustaste tu.
+
+Todo lo hacia por obligación porque era bueno y tengo el talento y es egoísta no aprovecharlo sabiendo que hay gente que mataría por poder hacerlo por eso lo hacia pero no sentía pasión al hacerlo por eso deje mi equipo por eso deje mi primer deporte así con lo demás que hago pero
+
+Desde que me gustaste tú hubo un cambio en mi porque ni yo se me motivaste si porque te explico porque no tenía pasión por nada
+
+Yo pensaba juego bien y a quien le importa se un trabajo que para muchos suele ser difícil y a quien le importa deje de esforzarme porque para que te esfuerzas si a nadie le importa y ahí es cuando entras tu desde la primera vez que te llore que me esforcé porque te quedaras me di cuenta no en ese rato después dije me esforcé para que se quedara conmigo porque?,que pasó Alejandro porque haces esto algo se activo en mi después lo arruinaba una y otra vez aunque me esforzaba porque porque ya no sabia como avía perdido esa capacidad la capacidad de esforzarme cuando quería  algo realmente cometí muchos errores pero por eso estoy aquí muchas personas se van de mi vida porque solía ser un caos pero tu
+
+“No te fuiste,nunca te fuiste te quedaste”
+
+Y trataste de irte tu misma me lo dijiste y todas las noches pienso habra algo en mi que ella también decidió esforzarse para quedarse conmigo porque se quedo son preguntas que me hago siempre pero bueno
+
+Graciass por devolverme la pasión que había perdido muchas demasiadas gracias y te preguntas porque te lo mereces te lo mereces por lo que hiciste por eso si necesitas alguna explicación de porque lo necesitas porque motivaste y hiciste sentir vivir a alguien
+
+Quieres saber cómo
+
+Gracias porque le empecé a echar ganas a mi trabajo a cortar el pelo con mas ganas y mas pasión porque conseguiría dinero para darte algo lindo
+
+Gracias porque quise jugar por gusto y no obligación porque me dijiste que podia y que creías en mi cosa que nadie había echado te lo juro cuando es nadie es nadie ni mis padres ni mis entrenadores nadieeeeeee
+
+Gracias por motivarme a mejorarme fisicamente por mejorar todo este cuerpo que ahora tengo que no espero el momento que lo veas de nuevo no cambiare tanto es difícil en poco tiempo pero ya es un mejor físico de una manera mas bromista te estoy haciendo un lonche mas pasado de guabaya oziozi
+
+Gracias por aguantarme y por estar para mi por mostrarme la desesperación que puede sentir alguien al amar con tantas ganas
+
+Gracias por decirme lo mas importante no eres diferente eres normal es como si al escuchar eso mi mente se despejara como si pudiera tocar todo sin sentir incomodidad escuchar todo sin irritarme ver colores sin incomodarme aunque aun pasa eso no se cura verdad JAJA,pero en ese momento eso sentí
+
+No pienso hacer nada mas por obligación todo con pasión porque eso es lo que le gusta a mi pequeña o no ya sabes cual es mi promesa y te agradecía pero realmente no dejando en claro porque lo hacia del todo pero es por en lo que me has convertido y me encanta`
+        }
+
+    };
+
+
+    let selectedPerson = null;
+
+
+    function showScreen(id) {
+
+        document.querySelectorAll(".screen").forEach(screen => {
+            screen.classList.remove("active");
+        });
+
+        document.getElementById(id).classList.add("active");
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+
+    function selectPerson(person) {
+
+        selectedPerson = person;
+
+        const data = messages[person];
+
+        document.getElementById("questionTitle").textContent =
+            person === "mama" ? "Para mamá" : "Para Yareli";
+
+        document.getElementById("questionText").textContent =
+            data.question;
+
+        document.getElementById("answerInput").value = "";
+
+        document.getElementById("errorText").textContent = "";
+
+        document.getElementById("lockIcon").textContent = "🔒";
+
+        showScreen("questionScreen");
+
+        setTimeout(() => {
+            document.getElementById("answerInput").focus();
+        }, 500);
+    }
+
+
+    function normalize(text) {
+
+        return text
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[¿?¡!.,]/g, "")
+            .trim();
+    }
+
+
+    function checkAnswer() {
+
+        if (!selectedPerson) return;
+
+        const input = normalize(
+            document.getElementById("answerInput").value
+        );
+
+        const validAnswers =
+            messages[selectedPerson].answers.map(normalize);
+
+        if (validAnswers.includes(input)) {
+
+            document.getElementById("errorText").textContent = "";
+
+            document.getElementById("lockIcon").textContent = "🔓";
+
+            showScreen("unlockScreen");
+
+        } else {
+
+            document.getElementById("errorText").textContent =
+                "Esa no parece ser la respuesta... intenta recordar un poco más. ❤️";
+
+            document.getElementById("answerInput").value = "";
+
+            document.getElementById("answerInput").focus();
+        }
+    }
+
+
+    function showLetter() {
+
+        const data = messages[selectedPerson];
+
+        document.getElementById("letterTitle").textContent =
+            data.title;
+
+        document.getElementById("letterBody").textContent =
+            data.message;
+
+        showScreen("letterScreen");
+    }
+
+</script>
+
+</body>
+</html>
